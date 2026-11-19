@@ -1,0 +1,29 @@
+{
+  "name": "opencode-guardrails",
+  "version": "0.1.0",
+  "description": "Decision-model guardrails for OpenCode shell/write/edit tools: allow-biased LLM verdicts, read-only fast-path, fail-open, audit log.",
+  "private": false,
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "guardrails",
+    "safety"
+  ],
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@opencode/plugin": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}
