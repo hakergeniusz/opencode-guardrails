@@ -1,9 +1,9 @@
 /**
- * Lifecycle owner for the optional local d3-lite decision model, ported from
- * pi-guardrails. The systemd *user* unit is deliberately DISABLED: no model
- * sits in RAM while cloud decision models are healthy. This helper starts it
- * on demand, waits for llama-server's /health, and puts it back down after an
- * idle window or at plugin unload — but only if THIS process started it.
+ * Lifecycle owner for the optional local d3-lite decision model. The systemd
+ * *user* unit is deliberately DISABLED: no model sits in RAM while cloud
+ * decision models are healthy. This helper starts it on demand, waits for
+ * llama-server's /health, and puts it back down after an idle window or at
+ * plugin unload — but only if THIS process started it.
  *
  * Dependency-free (only node builtins) so it can be unit-tested with injected
  * deps — no systemd, no network, no real time.

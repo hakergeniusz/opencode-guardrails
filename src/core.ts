@@ -242,7 +242,7 @@ export function actionToTool(action: string): string | undefined {
 	}
 }
 
-/** Build a payload from a tool hook's full input (the faithful pi-equivalent path). */
+/** Build a payload from a tool hook's full input. */
 export function buildPayloadFromTool(
 	tool: string,
 	input: unknown,
@@ -335,7 +335,7 @@ export type ChoiceAnswerLike = {
 	probabilities?: Array<{ value: string | boolean; probability: number }>
 }
 
-/** Parse OpenCode's `generate.decisions` choice answer (and pi-style map answers). */
+/** Parse OpenCode's `generate.decisions` choice answer (and map-form answers). */
 export function verdictFromDecisions(answers: ChoiceAnswerLike[]): Verdict | null {
 	const verdict = answers.find((a) => a.name === "verdict" || (a as Record<string, unknown>).name === undefined)
 	if (!verdict || verdict.type !== "choice") return null

@@ -1,7 +1,5 @@
 // Key-rotation test for googleDecisionsClassifier with a stubbed fetch and a
 // redirected HOME (no real config or network touched). Run: bun test
-//
-// Ported from pi-guardrails/test-keyring.ts (no pi dependencies).
 process.env.HOME = "/tmp/opencode-guardrails-keyring-home"
 // Self-contained: ignore any GEMINI_API_KEY_* already present in the runner env.
 for (const name of Object.keys(process.env)) {

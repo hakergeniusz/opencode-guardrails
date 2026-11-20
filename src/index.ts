@@ -7,7 +7,7 @@
  * the reason is fed back to the agent as a Tool.Error, letting it pick another
  * approach.
  *
- * Design rules (inherited from pi-guardrails):
+ * Design rules:
  *  - High bar: block only concrete, likely-irreversible harm; never task fit,
  *    style or conventions.
  *  - Fail-open: a dead guard must not brick the agent (configurable).
@@ -15,10 +15,10 @@
  *  - Audit log: every decision lands in guardrails-log.jsonl.
  *  - Read-only fast-path keeps harmless shell calls away from the model.
  *
- * OpenCode mapping:
+ * OpenCode hooks used:
  *  - tool `execute.before` hook  → capture full tool input (incl. write/edit content)
  *  - `permission.evaluate` hook  → the guard itself; deny with reason
- *  - session `prompt` hook       → per-prompt config reload (pi session_start)
+ *  - session `prompt` hook       → per-prompt config reload
  *  - `command.transform`         → /guardrails status/on/off/model/test/log
  *  - plugin cleanup              → stop the local d3-lite unit if we started it
  */
@@ -143,8 +143,7 @@ export default Plugin.define({
 				split.id === "d3-lite" ? Math.max(config.timeoutMs, 30_000) : config.timeoutMs
 			const model = { providerID: split.providerID, id: split.id }
 
-			// 1. Google AI Studio Decisions API — direct fetch, same key ring as
-			//    pi-guardrails (no OpenCode provider registration needed).
+			// 1. Google AI Studio Decisions API — direct fetch with key rotation.
 			if (split.providerID === "google-decisions") {
 				const result = await googleClassify(
 					{ id: split.id },
@@ -500,7 +499,7 @@ export default Plugin.define({
 			})
 		})
 
-		// Plugin unload ≈ pi session_shutdown: stop the local unit if we started it.
+		// Plugin unload: stop the local unit if we started it.
 		return async () => {
 			await toolHook.dispose().catch(() => undefined)
 			await permissionHook.dispose().catch(() => undefined)

@@ -1,15 +1,14 @@
 /**
- * Google AI Studio Decisions API classifier, ported from pi-guardrails.
+ * Google AI Studio Decisions API classifier.
  *
  * Same verdict protocol as OpenCode's decision models, but with Google's wire
  * shapes: questions/answers are maps, yes/no is `noul` (not `predicate`), and
  * auth is the `x-goog-api-key` header. Kept dependency-free so it can be tested
- * without OpenCode or pi.
+ * without OpenCode.
  *
- * Multi-key ring: gemini-decision-1 quota is per project (one project per
- * multi-account key), so a 429 or a revoked key tries the next key. Marks are
- * in-memory (session-scoped); labels are the key's last 4 chars — never the
- * key itself.
+ * Multi-key ring: gemini-decision-1 quota is per project, so a 429 or a revoked
+ * key tries the next key. Marks are in-memory (session-scoped); labels are the
+ * key's last 4 chars — never the key itself.
  */
 
 import * as fs from "node:fs"
@@ -50,7 +49,7 @@ function redactKey(value: string): string {
 	return value.length >= 8 ? `…${value.slice(-4)}` : "…"
 }
 
-/** pi-resolved key, google accounts in config, then GEMINI_API_KEY_N env scan. Deduped. */
+/** Resolve keys from GEMINI_API_KEY_N / GEMINI_API_KEY env vars and optional local account config. Deduped. */
 function keys(preferred: string | undefined): DecisionsKey[] {
 	const seen = new Set<string>()
 	const out: DecisionsKey[] = []
@@ -130,7 +129,7 @@ export function decisionsDeadUntil(errorMessage: string, now = Date.now()): numb
 	return now + SUSPECTED_TTL_MS
 }
 
-/** pi-ai question → Google Decisions wire question (map values, `noul` for bools). */
+/** Question → Google Decisions wire question (map values, `noul` for bools). */
 export function googleWireQuestion(question: {
 	type: string
 	instructions: string
@@ -175,7 +174,7 @@ export function googleDecisionsClassifier() {
 		const all = keys(options?.apiKey)
 		if (all.length === 0) {
 			output.stopReason = "error"
-			output.errorMessage = "no Google API key (set GEMINI_API_KEY_1 or configure google accounts in multi-account.json)"
+			output.errorMessage = "no Google API key (set GEMINI_API_KEY or GEMINI_API_KEY_1)"
 			return output
 		}
 		const ordered = [...all]

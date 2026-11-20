@@ -1,7 +1,5 @@
 // Lifecycle tests for d3LiteRuntime with fully injected dependencies — no
 // systemd, no network, no real time. Run with: bun test test/d3.test.ts
-//
-// Ported verbatim from pi-guardrails/test-d3.ts (no pi dependencies).
 
 process.env.HOME = "/tmp/opencode-guardrails-d3-home"
 
